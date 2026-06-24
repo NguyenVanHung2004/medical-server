@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import { User, UserRole } from "@/models/User";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     await dbConnect();
-    const { id } = params;
+    const { id } = await params;
 
     const doctor = await User.findOne({ _id: id, role: UserRole.DOCTOR }).select("-passwordHash -patientProfile -email -phone");
     if (!doctor) {

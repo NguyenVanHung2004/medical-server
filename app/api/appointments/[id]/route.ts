@@ -3,7 +3,7 @@ import dbConnect from "@/lib/mongodb";
 import { Appointment } from "@/models/Appointment";
 import { verifyAuth } from "@/lib/auth";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const auth = verifyAuth(req);
     if (!auth) {
@@ -11,7 +11,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     }
 
     await dbConnect();
-    const { id } = params;
+    const { id } = await params;
 
     const appointment = await Appointment.findById(id)
       .populate("doctorId", "fullName avatarUrl doctorProfile.specialty")
