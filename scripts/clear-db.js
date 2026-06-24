@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-require('dotenv').config({ path: '.env.local' }); // Dành cho chạy ở local nếu có file .env.local
 
 // Ưu tiên biến môi trường MONGODB_URI có sẵn khi chạy trên Zeabur
 const MONGODB_URI = process.env.MONGODB_URI;
