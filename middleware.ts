@@ -23,23 +23,7 @@ export async function middleware(request: NextRequest) {
   // 2. Chuyển tiếp Request tới API routes và lấy Response
   const response = await NextResponse.next();
 
-  // 3. Log Response
-  let resBodyStr = "";
-  try {
-    // Clone response để có thể đọc stream mà không ảnh hưởng tới client
-    const clonedRes = response.clone();
-    const text = await clonedRes.text();
-    try {
-      // Ép kiểu format JSON cho đẹp nếu có thể
-      resBodyStr = JSON.stringify(JSON.parse(text));
-    } catch {
-      resBodyStr = text;
-    }
-  } catch (e) {
-    resBodyStr = "[Cannot read response body]";
-  }
-
-  console.log(`[${timestamp}] ⬅️ RESPONSE: ${method} ${url} | Status: ${response.status} | Body: ${resBodyStr}`);
+  console.log(`[${timestamp}] ⬅️ RESPONSE: ${method} ${url} | Status: ${response.status}`);
   
   return response;
 }

@@ -39,9 +39,11 @@ export async function PUT(req: NextRequest) {
     if (!user) return NextResponse.json({ message: "User not found" }, { status: 404 });
 
     if (user.role === "PATIENT") {
-      user.patientProfile = { ...user.patientProfile, ...updates };
+      const currentProfile = user.patientProfile ? (user.patientProfile as any).toObject() : {};
+      user.patientProfile = { ...currentProfile, ...updates };
     } else if (user.role === "DOCTOR") {
-      user.doctorProfile = { ...user.doctorProfile, ...updates };
+      const currentProfile = user.doctorProfile ? (user.doctorProfile as any).toObject() : {};
+      user.doctorProfile = { ...currentProfile, ...updates };
     }
 
     if (updates.fullName) user.fullName = updates.fullName;
