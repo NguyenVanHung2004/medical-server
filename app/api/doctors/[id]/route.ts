@@ -13,19 +13,22 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     }
 
     const p = doctor.doctorProfile || {};
+    const offerings = p.consultationOfferings || [];
+    const supportedTypes = offerings.filter(o => o.isEnabled).map(o => o.type);
 
     return NextResponse.json({
       id: doctor._id,
       name: doctor.fullName,
-      avatarUrl: doctor.avatarUrl,
       specialty: p.specialty || "",
       hospital: p.hospital || "",
-      bio: p.bio || "",
-      yearsOfExperience: p.yearsOfExperience || 0,
+      avatarUrl: doctor.avatarUrl || "https://ui-avatars.com/api/?name=" + encodeURIComponent(doctor.fullName),
       rating: p.rating || 0,
+      yearsOfExperience: p.yearsOfExperience || 0,
+      isOnline: true,
+      supportedTypes: supportedTypes.length > 0 ? supportedTypes : ["ONLINE", "OFFLINE"],
+      isFullyBookedToday: false,
       reviewCount: p.reviewCount || 0,
-      consultationOfferings: p.consultationOfferings || [],
-      workingSchedule: p.workingSchedule || {}
+      bio: p.bio || ""
     });
   } catch (error: any) {
     return NextResponse.json({ message: error.message }, { status: 500 });

@@ -21,15 +21,25 @@ export async function GET(req: NextRequest) {
 
     const mappedDoctors = doctors.map((doc) => {
       const p = doc.doctorProfile || {};
+      const offerings = p.consultationOfferings || [];
+      const isOnlineConsultationEnabled = offerings.some(o => o.type === 'ONLINE' && o.isEnabled);
+      const onlineFee = offerings.find(o => o.type === 'ONLINE')?.fee || 0;
+      const isInPersonConsultationEnabled = offerings.some(o => (o.type === 'OFFLINE' || o.type === 'HOME_VISIT') && o.isEnabled);
+      const inPersonFee = offerings.find(o => o.type === 'OFFLINE' || o.type === 'HOME_VISIT')?.fee || 0;
+
       return {
         id: doc._id,
         name: doc.fullName,
-        avatarUrl: doc.avatarUrl,
+        avatarUrl: doc.avatarUrl || "https://ui-avatars.com/api/?name=" + encodeURIComponent(doc.fullName),
         specialty: p.specialty || "",
         hospital: p.hospital || "",
-        experience: `${p.yearsOfExperience || 0} years`,
-        rating: p.rating || 0,
-        reviewCount: p.reviewCount || 0
+        experience: `${p.yearsOfExperience || 0} năm`,
+        isOnlineConsultationEnabled,
+        onlineConsultationFee: onlineFee,
+        isInPersonConsultationEnabled,
+        inPersonConsultationFee: inPersonFee,
+        workingHoursSummary: "Thứ 2 - Thứ 6\n08:00 - 11:30\n13:30 - 17:00",
+        workingSchedule: p.workingSchedule || {}
       };
     });
 
