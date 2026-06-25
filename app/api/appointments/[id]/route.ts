@@ -37,6 +37,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       patientName: (appointment.patientId as any).fullName,
       patientInitial: (appointment.patientId as any).fullName.charAt(0).toUpperCase(),
       patientGender: (appointment.patientId as any).patientProfile?.gender,
+      patientAge: 0,
+      patientIdStr: appointment.patientId._id.toString(),
       patientAvatarUrl: (appointment.patientId as any).avatarUrl,
       date: appointment.date,
       timeRange: appointment.timeRange,

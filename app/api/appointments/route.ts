@@ -69,6 +69,8 @@ export async function GET(req: NextRequest) {
       patientName: (app.patientId as any).fullName,
       patientInitial: (app.patientId as any).fullName.charAt(0).toUpperCase(),
       patientGender: (app.patientId as any).patientProfile?.gender,
+      patientAge: 0,
+      patientIdStr: app.patientId._id.toString(),
       patientAvatarUrl: (app.patientId as any).avatarUrl,
       date: app.date,
       timeRange: app.timeRange,
