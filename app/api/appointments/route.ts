@@ -14,13 +14,20 @@ export async function POST(req: NextRequest) {
     await dbConnect();
     const { doctorId, date, timeRange, reason, type } = await req.json();
 
+    const doctor = await User.findById(doctorId);
+    let location = "Phòng khám tư";
+    if (doctor && doctor.doctorProfile && doctor.doctorProfile.hospital) {
+        location = doctor.doctorProfile.hospital;
+    }
+
     const newAppointment = new Appointment({
       patientId: auth.userId,
       doctorId,
       date,
       timeRange,
       reason,
-      type
+      type,
+      location
     });
 
     await newAppointment.save();
